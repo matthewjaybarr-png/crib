@@ -46,7 +46,7 @@ with no setup. If writing the file fails, Crib prints a message and keeps runnin
 - [Swarf](https://github.com/matthewjaybarr-png/swarf): G-code editor
 - [Apphub](https://github.com/matthewjaybarr-png/apphub): finds, installs and launches these apps
 - [Jig](https://github.com/matthewjaybarr-png/jig): set-up sheets
-- [Gauge](https://github.com/matthewjaybarr-png/gauge): shop calculator
+- [Gauge](https://github.com/matthewjaybarr-png/gauge): machining calculator for speeds and feeds, drills, taps and setup math
 
 ## License
 
