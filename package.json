@@ -2,7 +2,7 @@
   "name": "crib",
   "private": true,
   "type": "module",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Crib - tool book editor and machine-side viewer for CNC shops",
   "license": "GPL-3.0-or-later",
   "scripts": {
