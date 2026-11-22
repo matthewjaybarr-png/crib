@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Crib</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="viewer.css">
+</head>
+<body>
+<header>
+  <h1 id="title">Crib</h1>
+  <span id="info"></span>
+  <span id="state" role="status"></span>
+</header>
+<details id="notes" hidden><summary id="notes-head">Book notes</summary><pre id="notes-body"></pre></details>
+<main>
+  <section id="left">
+    <div id="filters">
+      <input id="q" type="search" placeholder="Search id, description, notes" aria-label="Search tools" autocomplete="off">
+      <div id="views"></div>
+      <select id="category" aria-label="Category"></select>
+      <select id="material" aria-label="Material"></select>
+    </div>
+    <div id="count"></div>
+    <ul id="list" role="listbox" aria-label="Tools"></ul>
+  </section>
+  <section id="detail"><p class="muted">Pick a tool.</p></section>
+</main>
+<script src="filter.js"></script>
+<script src="viewer.js"></script>
+</body>
+</html>

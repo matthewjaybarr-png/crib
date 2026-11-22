@@ -1,0 +1,88 @@
+/* Neon Ridge (the default look on both screens). Night navy; amber is kept for
+   pots only, so a pot stands out wherever it is; green = up to date, sunset orange = warnings. Published pages keep the
+   system font. */
+:root {
+  --bg: #0a1028; --panel: #111a3c; --raise: #1a2550; --line: #26315e; --edge: #7480bf;
+  --ink: #d7dcf5; --muted: #a3abd8; --pot: #f5c98a; --sel: #2a3a78; --ring: #38bdfa;
+  --go: #146b52; --guard: #f0946e; --on-guard: #070b1e;
+}
+* { box-sizing: border-box; }
+body { margin: 0; font: 16px system-ui, sans-serif; background: var(--bg); color: var(--ink); height: 100vh; height: 100dvh; display: flex; flex-direction: column; }
+header { display: flex; flex-wrap: wrap; gap: 2px 16px; align-items: baseline; padding: 8px 16px; background: var(--panel); border-bottom: 1px solid var(--line); }
+h1 { margin: 0; font-size: 20px; }
+#info { color: var(--muted); font-size: 14px; flex: 1; }
+#state { font-weight: 600; padding: 2px 10px; border-radius: 3px; }
+#state.ok { background: var(--go); }
+#state.bad { background: var(--guard); color: var(--on-guard); }
+#state.saved { background: var(--sel); }
+main { flex: 1; display: flex; min-height: 0; }
+#left { width: 40%; min-width: 300px; display: flex; flex-direction: column; border-right: 1px solid var(--line); background: var(--bg); }
+#filters { display: flex; flex-wrap: wrap; gap: 6px; padding: 10px; }
+#filters input { flex: 1 1 100%; }
+input, select { font: inherit; padding: 6px; background: var(--raise); color: inherit; border: 1px solid var(--edge); border-radius: 3px; }
+#filters select { flex: 1; min-width: 0; }
+#count { padding: 0 12px 6px; color: var(--muted); font-size: 13px; }
+/* a row reads like a tool tag: [pot] number, then the description; numbers line up down the list */
+#list { list-style: none; margin: 0; padding: 0; overflow: auto; flex: 1; border-top: 1px solid var(--line); }
+#list li { display: flex; align-items: baseline; gap: 10px; padding: 8px 12px; border-bottom: 1px solid var(--line); cursor: pointer; }
+#list li b { flex: 0 0 auto; min-width: 4.2em; font-variant-numeric: tabular-nums; }
+#list li .desc { flex: 1; min-width: 0; }
+#list li:hover { background: var(--panel); }
+#list li.sel { background: var(--sel); }
+#list li:focus-visible { outline: 2px solid var(--ring); outline-offset: -2px; } /* keyboard focus (design review 11-08) */
+.pocket { flex: 0 0 auto; display: inline-block; min-width: 4.2em; color: var(--pot); font-weight: 700; font-variant-numeric: tabular-nums; }
+.pocket.none { color: var(--muted); font-weight: 400; }
+#detail { flex: 1; overflow: auto; padding: 16px 24px; }
+#detail img { max-width: 100%; max-height: 50vh; background: #fff; border-radius: 3px; }
+/* the tool tag at the top of a tool: the number large, the description, and the pot on each machine */
+.tag { display: grid; grid-template-columns: auto 1fr; gap: 4px 18px; align-items: baseline; margin: 0 0 14px; padding: 0 0 14px; border-bottom: 2px solid var(--line); }
+.tag h2 { display: contents; }
+.tag .tno { font-size: 44px; font-weight: 700; line-height: 1; letter-spacing: -0.01em; font-variant-numeric: tabular-nums; }
+.tag .tdesc { font-size: 20px; font-weight: 600; line-height: 1.25; }
+.tag .pots { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+.pot { display: inline-flex; align-items: baseline; gap: 8px; padding: 4px 12px; background: var(--pot); color: var(--on-guard); border-radius: 3px; font-size: 22px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.pot small { font-size: 13px; font-weight: 600; }
+.pot.none { background: transparent; color: var(--muted); border: 1px dashed var(--edge); font-size: 15px; font-weight: 500; }
+.pot.here { outline: 2px solid var(--ink); outline-offset: 2px; }
+table { border-collapse: collapse; }
+th { text-align: left; padding: 4px 18px 4px 0; color: var(--muted); font-weight: 500; vertical-align: top; }
+td { padding: 4px 0; }
+h3 { font-size: 16px; margin: 20px 0 6px; }
+pre { font: 15px ui-monospace, Consolas, monospace; white-space: pre-wrap; background: var(--panel); padding: 10px; border-radius: 3px; }
+.muted { color: var(--muted); }
+#views { flex: 1 1 100%; display: flex; flex-wrap: wrap; gap: 6px; }
+#views button { font: inherit; padding: 6px 10px; background: var(--raise); color: inherit; border: 1px solid var(--edge); border-radius: 3px; cursor: pointer; }
+#views button.sel { background: var(--sel); border-color: var(--ink); }
+/* material colours: neutral until the workbook's colours are known; add a rule per material name */
+.badge { font-size: 12px; padding: 1px 7px; border-radius: 3px; background: #2c3868; margin-left: 4px; white-space: nowrap; }
+.badge[data-m="SS"] { background: #2f5a8c; }
+.badge[data-m="AL"] { background: #2f6650; }
+.badge[data-m="planned"] { background: transparent; border: 1px dashed var(--edge); }
+.badge[data-m="unknown"] { background: #5a3a8a; }
+.badge[data-m="flag"] { background: var(--guard); color: var(--on-guard); }
+.badge[data-m="retired"] { background: #3a4678; }
+#detail p .badge:first-child { margin-left: 0; }
+#notes { padding: 4px 16px; background: var(--panel); border-bottom: 1px solid var(--line); font-size: 14px; }
+#notes summary { cursor: pointer; color: var(--muted); }
+#notes pre { margin: 6px 0; max-height: 30vh; overflow: auto; background: var(--bg); }
+pre.was { color: var(--muted); border-left: 3px solid #3a4678; } /* earlier tools with this number */
+.backbar { display: none; }
+/* phones: one pane at a time, the list or a tool with a Back button (same width as viewer.js `narrow`) */
+@media (max-width: 700px) {
+  header { padding: 6px 12px; }
+  #state { margin-left: auto; }
+  #info { order: 3; flex-basis: 100%; font-size: 13px; }
+  #notes { padding: 4px 12px; }
+  #left { width: 100%; min-width: 0; border-right: 0; }
+  #list li { padding: 10px 12px; min-height: 44px; }
+  /* touch targets at least 44 px tall on phones (design review 0.2.5) */
+  input, select, #views button, .backbar button { min-height: 44px; }
+  #detail { display: none; padding: 0 12px 12px; }
+  body.detail #left { display: none; }
+  body.detail #detail { display: block; }
+  .backbar { display: block; position: sticky; top: 0; padding: 8px 0; background: var(--bg); border-bottom: 1px solid var(--line); margin-bottom: 12px; }
+  .backbar button { font: inherit; padding: 6px 12px; background: var(--raise); color: inherit; border: 1px solid var(--edge); border-radius: 3px; cursor: pointer; }
+  .tag .tno { font-size: 34px; }
+  .tag .tdesc { font-size: 17px; }
+  .pot { font-size: 19px; }
+}

@@ -1,0 +1,25 @@
+[package]
+name = "crib"
+version = "0.1.0"
+description = "Crib - tool book editor and machine-side viewer for CNC shops"
+license = "GPL-3.0-or-later"
+edition = "2021"
+
+[lib]
+name = "crib_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = [] }
+tauri-plugin-dialog = "2"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+[profile.release]
+opt-level = "s"
+lto = true
+codegen-units = 1
+strip = true

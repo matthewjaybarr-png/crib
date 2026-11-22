@@ -1,0 +1,221 @@
+/* Fonts: JetBrains Mono NL by default; JetBrainsMono Nerd Font (with
+   ligatures, e.g. the x in 1/2x3) for tool numbers and lengths. Both from Nerd Fonts v3.5.1, bundled in ui/fonts with OFL.txt so PCs without them installed show them too. The published pages and offline copies (ui/viewer) keep their own fonts. */
+@font-face { font-family: "Crib JetBrains Mono NL"; src: url("fonts/JetBrainsMonoNLNerdFont-Regular.ttf") format("truetype"); font-weight: 400; font-style: normal; font-display: block; }
+@font-face { font-family: "Crib JetBrains Mono NL"; src: url("fonts/JetBrainsMonoNLNerdFont-Bold.ttf") format("truetype"); font-weight: 700; font-style: normal; font-display: block; }
+@font-face { font-family: "Crib JetBrainsMono Nerd"; src: url("fonts/JetBrainsMonoNerdFont-Regular.ttf") format("truetype"); font-weight: 400; font-style: normal; font-display: block; }
+@font-face { font-family: "Crib JetBrainsMono Nerd"; src: url("fonts/JetBrainsMonoNerdFont-Bold.ttf") format("truetype"); font-weight: 700; font-style: normal; font-display: block; }
+:root {
+  --font: "Crib JetBrains Mono NL", system-ui, sans-serif;
+  --font-num: "Crib JetBrainsMono Nerd", "Crib JetBrains Mono NL", system-ui, sans-serif;
+  --font-pre: "Crib JetBrains Mono NL", ui-monospace, Consolas, monospace;
+  /* Neon Ridge (the default look, the same as the published page): night navy, moonlit lavender text, a cyan focus ring; amber only for pots; green = done, sunset
+     orange = warnings and read-only; blue only for the main buttons. */
+  --bg: #0a1028; --panel: #111a3c; --raise: #1a2550; --hover: #24316a; --line: #26315e; --edge: #7480bf;
+  --ink: #d7dcf5; --muted: #a3abd8; --pot: #f5c98a; --sel: #2a3a78; --ring: #38bdfa;
+  --err: #ff8fae; --errsel: #ffc0d0; --warn: #f0946e; --go: #146b52; --guard: #f0946e; --on-guard: #070b1e; --primary: #3559d4; --primary-hover: #3f63dc;
+}
+* { box-sizing: border-box; }
+body { margin: 0; font-size: 14px; font-family: var(--font); background: var(--bg); color: var(--ink); height: 100vh; }
+pre, code { font-family: var(--font-pre); }
+.num, #list li b, #form h2, .chgtool b { font-family: var(--font-num); }
+#app { height: 100%; display: flex; flex-direction: column; }
+header { display: flex; gap: 10px; align-items: center; padding: 8px 14px; background: var(--panel); border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+header h1 { margin: 0; font-size: 18px; margin-right: auto; }
+button, input, select, textarea { font: inherit; padding: 5px 9px; background: var(--raise); color: inherit; border: 1px solid var(--edge); border-radius: 4px; }
+button { cursor: pointer; }
+button:hover:not(:disabled) { background: var(--hover); }
+button.primary { background: var(--primary); border-color: var(--primary); color: #fff; font-weight: 700; }
+button.primary:hover:not(:disabled) { background: var(--primary-hover); border-color: var(--ring); }
+button:disabled, input:disabled, textarea:disabled { opacity: .6; cursor: default; }
+.page { padding: 20px; max-width: 760px; }
+.row { display: flex; gap: 8px; align-items: center; margin: 8px 0; }
+.row > input { flex: 1; }
+.card { display: flex; gap: 10px; align-items: center; padding: 8px 10px; border: 1px solid var(--edge); border-radius: 6px; margin: 6px 0; }
+.card .name { flex: 1; font-weight: 600; }
+.muted { color: var(--muted); }
+.banner { padding: 8px 14px; background: var(--guard); color: var(--on-guard); font-weight: 600; display: flex; gap: 10px; align-items: center; }
+.banner.info { background: var(--sel); color: var(--ink); font-weight: 400; }
+.err { color: var(--err); font-size: 13px; }
+#cols { flex: 1; display: flex; min-height: 0; }
+#side { width: 36%; min-width: 280px; border-right: 1px solid var(--line); display: flex; flex-direction: column; }
+#side .tools { padding: 8px; display: flex; gap: 6px; flex-wrap: wrap; }
+#side .tools input { flex: 1; min-width: 0; }
+#list { list-style: none; margin: 0; padding: 0; overflow: auto; flex: 1; border-top: 1px solid var(--line); }
+/* a row reads like a tool tag: [pot] mark number, then the description; numbers line up down the list */
+#list li { display: flex; align-items: baseline; gap: 8px; padding: 6px 12px; border-bottom: 1px solid var(--line); cursor: pointer; }
+#list li:hover { background: var(--panel); }
+#list li b { flex: 0 0 auto; min-width: 4.5em; }
+#list li .desc { flex: 1; min-width: 0; }
+#list li .mark { flex: 0 0 auto; }
+#list li .pocket { flex: 0 0 auto; min-width: 5em; color: var(--pot-ink, var(--pot)); font-weight: 700; font-family: var(--font-num); }
+#list li .pocket.none { color: var(--muted); font-weight: 400; }
+#list li.sel { background: var(--sel); }
+#list li.bad b, #list li.bad .mark { color: var(--err); }
+#list li.sel.bad b, #list li.sel.bad .mark { color: var(--errsel); } /* 6.9:1 on the selected row (design review 11-08) */
+#list li.warn .mark { color: var(--warn); }
+/* keyboard focus: a light ring, seen on the selected row too (design review 11-08) */
+#list li:focus-visible { outline: 2px solid var(--ring); outline-offset: -2px; }
+#list li.warn b { color: var(--warn); }
+.warn { color: var(--warn); font-size: 13px; }
+#form { flex: 1; overflow: auto; padding: 14px 20px; }
+#form label { display: block; margin: 8px 0 2px; color: var(--muted); font-size: 13px; }
+/* General: label | box rows, so the eye runs down one column of values (design 11-08) */
+#form .fields { display: grid; grid-template-columns: minmax(9em, 15em) 1fr; gap: 6px 14px; align-items: center; max-width: 820px; }
+#form .fields > label { margin: 0; text-align: right; }
+#form .fields > .inline { min-height: 30px; }
+/* the tool tag: the number large, the description, the pot on each machine in safety yellow, the materials */
+.tag { display: grid; grid-template-columns: auto 1fr; gap: 4px 18px; align-items: baseline; margin: 0 0 6px; padding: 2px 0 14px; border-bottom: 2px solid var(--line); }
+.tag h2 { display: contents; }
+.tag .tno { font-family: var(--font-num); font-size: 40px; font-weight: 700; line-height: 1; }
+.tag .tdesc { font-size: 17px; font-weight: 700; line-height: 1.3; }
+.tag .pots, .tag .mats { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 8px; }
+.tag .pots { margin-top: 8px; }
+.pot { display: inline-flex; align-items: baseline; gap: 8px; padding: 3px 10px; background: var(--pot); color: var(--on-guard); border-radius: 3px; font-family: var(--font-num); font-size: 19px; font-weight: 700; }
+.pot small { font-size: 12px; }
+.pot.clash { outline: 3px solid var(--warn, #c90); }
+.pot.none { background: transparent; color: var(--muted); border: 1px dashed var(--edge); font-size: 14px; font-weight: 400; }
+.badge { font-size: 12px; padding: 1px 7px; border-radius: 3px; background: var(--hover); }
+/* the toolbar's less-used buttons */
+details.more { position: relative; }
+details.more > summary { list-style: none; padding: 5px 12px; border: 1px solid var(--edge); border-radius: 4px; background: var(--raise); cursor: pointer; }
+details.more > summary::-webkit-details-marker { display: none; }
+details.more > summary::after { content: " \25BE"; }
+details.more[open] > summary { background: var(--hover); }
+details.more .menu { position: absolute; right: 0; top: calc(100% + 4px); z-index: 15; display: flex; flex-direction: column; gap: 2px; min-width: 190px; padding: 6px; background: var(--panel); border: 1px solid var(--edge); border-radius: 4px; box-shadow: 0 6px 20px #0009; }
+details.more .menu button { text-align: left; border-color: transparent; background: transparent; }
+details.more .menu button:hover:not(:disabled) { background: var(--raise); }
+:focus-visible { outline: 2px solid var(--ring); outline-offset: 1px; }
+#form input[type=text], #form textarea { width: 100%; }
+#form textarea { min-height: 90px; font-family: var(--font-pre); }
+#form .inline { display: flex; gap: 14px; align-items: center; }
+#form img { max-width: 320px; max-height: 240px; background: #fff; display: block; margin: 6px 0; }
+iframe { flex: 1; border: 0; width: 100%; background: var(--bg); }
+/* long paths have no spaces: break them anywhere, and scroll a very long note, so it is never cut off (0.2.2 review) */
+#notice { position: fixed; left: 50%; bottom: 16px; transform: translateX(-50%); max-width: 80%; max-height: 40vh; overflow-y: auto; box-sizing: border-box; padding: 10px 16px; border-radius: 4px; cursor: pointer; z-index: 10; white-space: pre-wrap; overflow-wrap: anywhere; box-shadow: 0 2px 10px #000a; }
+#notice.ok { background: var(--go); color: #fff; }
+#notice.err { background: #8a2448; color: #fff; }
+/* ask(): in-page question box (window.confirm shows nothing in the Windows app) */
+.modal { position: fixed; inset: 0; background: #000a; display: grid; place-items: center; z-index: 20; padding: 16px; }
+.dialog { background: var(--panel); border: 1px solid var(--edge); border-radius: 8px; padding: 18px 20px 12px; max-width: 540px; box-shadow: 0 6px 30px #000c; }
+.dialog p { margin: 0 0 12px; white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.45; }
+.row.end { justify-content: flex-end; }
+/* filters wrap to as many columns as fit, so "All categories" and "Built or planned" are not cut off (design review 0.2.5) */
+#side .tools select { flex: 1 1 10.5em; min-width: 0; font: inherit; }
+#form h3 { margin: 22px 0 8px; padding-bottom: 3px; border-bottom: 1px solid var(--line); font-size: 15px; }
+/* Create-from-Excel wizard (wizard.js); the page scrolls as a whole */
+.wiz { max-width: 1100px; }
+.steps { display: flex; gap: 6px; margin: 10px 0 16px; flex-wrap: wrap; }
+.steps button.on { background: var(--primary); border-color: var(--primary); color: #fff; }
+table.grid { border-collapse: collapse; width: 100%; margin: 6px 0; }
+table.grid td, table.grid th { border-bottom: 1px solid var(--line); padding: 5px 8px; text-align: left; vertical-align: top; }
+table.grid th { color: var(--muted); font-weight: normal; font-size: 13px; }
+.wiz pre { background: var(--panel); padding: 10px; border-radius: 6px; white-space: pre-wrap; font-size: 13px; font-family: var(--font-pre); }
+.was pre { background: var(--panel); color: var(--muted); border-left: 3px solid #3a4678; padding: 8px; border-radius: 4px; white-space: pre-wrap; font-size: 13px; font-family: var(--font-pre); margin: 6px 0 4px; } /* earlier tools with this number */
+.wiz h3 { margin: 22px 0 6px; border-bottom: 1px solid var(--line); font-size: 15px; }
+.card.bad { border-color: #b03a62; flex-wrap: wrap; }
+.grow { flex: 1; min-width: 240px; }
+.row > input.num { flex: 0 0 auto; width: 9em; }
+.tbox { display: grid; grid-template-columns: minmax(240px, 1fr) 2fr; gap: 10px; height: 440px; }
+.tbox ul { list-style: none; margin: 0; padding: 0; overflow: auto; border: 1px solid var(--line); border-radius: 6px; }
+.tbox li { padding: 5px 10px; border-bottom: 1px solid var(--line); cursor: pointer; font-size: 14px; }
+.tbox li.sel { background: var(--sel); }
+.tbox .detail { overflow: auto; border: 1px solid var(--line); border-radius: 6px; padding: 4px 12px; }
+.tbox .detail h4 { margin: 8px 0; }
+img.thumb { width: 96px; height: 72px; object-fit: contain; background: #fff; border-radius: 4px; }
+.wiz details { margin: 8px 0; }
+.wiz summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
+.wiz .kind { color: var(--muted); font-size: 13px; margin: 8px 0 2px; }
+.wiz .item { font-size: 13px; padding: 2px 0 2px 14px; }
+/* Import from Excel into an open toolbook: page 5 Changes */
+.chgtool { border: 1px solid var(--line); border-radius: 6px; padding: 6px 10px; margin: 6px 0; }
+table.chg td { white-space: pre-wrap; font-size: 13px; }
+table.chg th:first-child { width: 22%; }
+table.chg td:last-child, table.chg th:last-child { width: 9em; text-align: center; }
+table.chg.left td:last-child, table.chg.left th:last-child { width: auto; text-align: left; } /* a value, not a tick */
+.card.add { cursor: pointer; }
+.wiz .sum { font-weight: 600; }
+
+/* ================= Layout =================
+   A sidebar beside a raised, rounded panel; quieter toolbar; sections with room to breathe. Colours stay the
+   variables above, so the built-in and Omarchy themes (theme.js) restyle everything. */
+body { font-size: 13.5px; overflow: hidden; }
+#app { flex-direction: row; }
+.ico { font-family: var(--font-num); display: inline-block; width: 1.3em; text-align: center; }
+.sidebar { flex: 0 0 228px; display: flex; flex-direction: column; gap: 2px; padding: 14px 10px 12px; min-height: 0; overflow: auto; }
+.sidebar .brand { display: flex; align-items: center; gap: 10px; padding: 2px 6px 14px; }
+.sidebar .brand img { width: 30px; height: 30px; }
+.sidebar .brand b { display: block; font-size: 16px; letter-spacing: .02em; }
+.sidebar .brand small { font-size: 11.5px; }
+.sidebar .nav { display: flex; align-items: center; gap: 8px; width: 100%; padding: 6px 8px; border: 0; border-radius: 6px; background: transparent; color: var(--muted); text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sidebar .nav span:last-child { overflow: hidden; text-overflow: ellipsis; }
+.sidebar button.nav:hover { background: var(--raise); color: var(--ink); }
+.sidebar .nav.on { background: var(--raise); color: var(--ink); font-weight: 700; }
+.sidebar .nav.sub { padding-left: 22px; font-weight: 400; background: var(--sel); }
+.sidebar .grow { flex: 1; min-height: 16px; min-width: 0; }
+.sidebar .navlabel { font-size: 11.5px; color: var(--muted); padding: 0 4px; text-transform: uppercase; letter-spacing: .08em; }
+.sidebar select { width: 100%; margin: 4px 0 10px; }
+.sidebar .modeline { display: flex; align-items: center; gap: 6px; font-size: 12.5px; padding: 8px 4px; border-top: 1px solid var(--line); }
+.sidebar > button:last-child { width: 100%; }
+.main { flex: 1; min-width: 0; display: flex; flex-direction: column; margin: 8px 8px 8px 0; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; box-shadow: 0 2px 14px #0004; }
+.main > :not(header):not(#cols):not(iframe):not(.banner):not(:has(> header)) { overflow: auto; }
+.main > .page, .main > .wiz { flex: 1; }
+header { gap: 8px; padding: 10px 14px; background: transparent; min-height: 50px; position: relative; z-index: 5; }
+header h1 { font-size: 14px; font-weight: 700; margin-right: 0; color: var(--muted); }
+header h1 + * { margin-left: 0; }
+header > :nth-child(2) { margin-right: auto; }
+header .crumb { font-weight: 700; color: var(--ink); margin-right: auto; }
+header .crumb::before { content: "/"; color: var(--muted); font-weight: 400; margin-right: 8px; }
+header .crumb ~ span { margin-right: 0; }
+header .err, header .warn, header .crumb ~ span.muted { font-size: 12px; padding: 2px 8px; border-radius: 999px; background: var(--raise); }
+header input { min-width: 0; }
+/* editor toolbar: Import + More always on their own second row, so the layout does not jump with the book name length */
+header:has(> details.more)::after { content: ""; flex-basis: 100%; order: 1; }
+header > button:has(+ details.more), header > details.more { order: 2; }
+button, input, select, textarea { border-radius: 6px; border-color: var(--line); }
+button { border-color: var(--edge); }
+input:focus, select:focus, textarea:focus { border-color: var(--ring); outline: none; box-shadow: 0 0 0 2px color-mix(in srgb, var(--ring) 30%, transparent); }
+button.icon { width: 30px; height: 28px; padding: 0; font-family: var(--font-num); }
+.banner { border-radius: 0; flex-wrap: wrap; }
+.page .banner { border-radius: 8px; margin: 8px 0; }
+.page { max-width: 880px; padding: 22px 28px 40px; }
+.page h2 { font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin: 26px 0 8px; }
+.page > h2:first-child { margin-top: 4px; }
+.page > p.muted { margin: 4px 0 10px; }
+.card { border-color: var(--line); background: var(--raise); border-radius: 8px; padding: 10px 12px; transition: border-color .12s; }
+.card:hover { border-color: var(--edge); }
+.card .name::before { content: "\f02d"; font-family: var(--font-num); color: var(--muted); margin-right: 10px; font-weight: 400; }
+/* the book: list | tool */
+#cols { border-top: 1px solid var(--line); }
+#side { width: 34%; max-width: 520px; background: color-mix(in srgb, var(--bg) 35%, var(--panel)); }
+#side .tools { padding: 8px 10px; }
+#side .tools select { flex: 1 1 40%; min-width: 0; }
+#list li { border-bottom-color: color-mix(in srgb, var(--line) 55%, transparent); padding: 6px 12px; }
+#list li:hover { background: var(--raise); }
+#list li.sel { box-shadow: inset 3px 0 0 var(--ring); }
+#form { padding: 12px 28px 40px; }
+#form > h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin: 28px 0 10px; padding-top: 14px; border-top: 1px solid var(--line); }
+#form > .inline { padding: 6px 10px; margin: 6px 0; border: 1px solid var(--line); border-radius: 8px; background: var(--raise); flex-wrap: wrap; }
+.stepper { display: flex; justify-content: flex-end; align-items: center; gap: 6px; margin: 0 0 6px; font-size: 12px; }
+.tag { border-bottom: 0; }
+.danger button { border-color: var(--err); color: var(--err); background: transparent; }
+.danger button:hover:not(:disabled) { background: color-mix(in srgb, var(--err) 14%, transparent); }
+.empty { height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 4px; padding: 40px; }
+.empty .big { font-size: 42px; width: auto; color: var(--muted); opacity: .7; }
+.empty h2 { margin: 10px 0 0; font-size: 16px; }
+.empty p { max-width: 380px; }
+details.more > summary, details.more .menu { border-radius: 6px; }
+details.more .menu { background: var(--raise); }
+details.more .menu button:hover:not(:disabled) { background: var(--hover); }
+iframe { background: var(--panel); }
+/* narrow windows: the sidebar slims to icons */
+@media (max-width: 900px) {
+  .sidebar { flex-basis: 64px; }
+  .sidebar .brand div, .sidebar .navlabel, .sidebar select, .sidebar .nav > :not(.ico), .sidebar .nav.sub { display: none; }
+  .sidebar .nav { justify-content: center; }
+  .sidebar .modeline { font-size: 0; justify-content: center; }
+  .sidebar .modeline .ico { font-size: 14px; }
+  .sidebar > button:last-child { font-size: 11px; padding: 5px 2px; white-space: normal; }
+}
+/* 0.2.13: the folder under each toolbook's name; a toolbook whose folder cannot be reached is greyed */
+.card .name small { display: block; font-weight: 400; }
+.card.gone .name { opacity: 0.6; }
